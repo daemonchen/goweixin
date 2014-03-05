@@ -7,7 +7,7 @@ import (
 	"fmt"
 	// . "github.com/jbrukh/bayesian"
 	"github.com/jgraham909/revmgo"
-	"github.com/robfig/revel"
+	"github.com/revel/revel"
 	// "io/ioutil"
 	// "os"
 	// "strconv"
@@ -49,7 +49,7 @@ type Badge struct {
 	Note   int `json:"note"`
 }
 
-func (c *Api) CheckSignature(signature, timestamp, nonce, echostr string) revel.Result {
+func (c *Api) Index(signature, timestamp, nonce, echostr string) revel.Result {
 	revel.INFO.Println(signature)
 	revel.INFO.Println(timestamp)
 	revel.INFO.Println(nonce)
@@ -60,6 +60,15 @@ func (c *Api) CheckSignature(signature, timestamp, nonce, echostr string) revel.
 	} else {
 		return c.RenderText("false")
 	}
+}
+
+func (c *Api) Post() revel.Result {
+	return c.RenderText("tf")
+}
+
+func (c *Api) Put() revel.Result {
+	return c.RenderText("tf")
+
 }
 
 func signatureSha1(timestamp, nonce string) string {
