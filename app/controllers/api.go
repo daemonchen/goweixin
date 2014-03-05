@@ -56,7 +56,7 @@ func (c *Api) CheckSignature(signature, timestamp, nonce, echostr string) revel.
 	revel.INFO.Println(echostr)
 	revel.INFO.Println(signatureSha1(timestamp, nonce))
 	if signatureSha1(timestamp, nonce) == signature {
-		return c.RenderText(signature)
+		return c.RenderText(echostr)
 	} else {
 		return c.RenderText("false")
 	}
