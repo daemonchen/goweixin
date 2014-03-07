@@ -1,28 +1,43 @@
-
+--------
 接收消息
-
+--------
 文本消息
 
- <xml>
-   <ToUserName><![CDATA[toUser]]></ToUserName>
-   <FromUserName><![CDATA[fromUser]]></FromUserName>
-   <CreateTime>1348831860</CreateTime>
-   <MsgType><![CDATA[text]]></MsgType>
-   <Content><![CDATA[this is a test]]></Content>
-   <MsgId>1234567890123456</MsgId>
- </xml>
+ \<xml>
+ 
+   \<ToUserName><![CDATA[toUser]]>\</ToUserName>
+   
+   \<FromUserName><![CDATA[fromUser]]>\</FromUserName>
+   
+   \<CreateTime>1348831860\</CreateTime>
+   
+   \<MsgType><![CDATA[text]]>\</MsgType>
+   
+   \<Content><![CDATA[this is a test]]>\</Content>
+   
+   \<MsgId>1234567890123456\</MsgId>
+   
+ \</xml>
 
  图片消息
 
- <xml>
-   <ToUserName><![CDATA[toUser]]></ToUserName>
-   <FromUserName><![CDATA[fromUser]]></FromUserName>
-   <CreateTime>1348831860</CreateTime>
-   <MsgType><![CDATA[image]]></MsgType>
-   <PicUrl><![CDATA[this is a url]]></PicUrl>
-   <MediaId><![CDATA[media_id]]></MediaId>
-   <MsgId>1234567890123456</MsgId>
- </xml>
+ \<xml>
+ 
+   \<ToUserName><![CDATA[toUser]]>\</ToUserName>
+   
+   \<FromUserName><![CDATA[fromUser]]>\</FromUserName>
+   
+   \<CreateTime>1348831860\</CreateTime>
+   
+   \<MsgType><![CDATA[image]]>\</MsgType>
+   
+   \<PicUrl><![CDATA[this is a url]]>\</PicUrl>
+   
+   \<MediaId><![CDATA[media_id]]>\</MediaId>
+   
+   \<MsgId>1234567890123456\</MsgId>
+   
+ \</xml>
 
  语音消息
 
@@ -75,17 +90,25 @@
 <MsgId>1234567890123456</MsgId>
 </xml>
 
+----------------
 发送被动响应消息
+----------------
 
 回复文本消息
 
-<xml>
-<ToUserName><![CDATA[toUser]]></ToUserName>
-<FromUserName><![CDATA[fromUser]]></FromUserName>
-<CreateTime>12345678</CreateTime>
-<MsgType><![CDATA[text]]></MsgType>
-<Content><![CDATA[你好]]></Content>
-</xml>
+\<xml>
+
+\<ToUserName><![CDATA[toUser]]>\</ToUserName>
+
+\<FromUserName><![CDATA[fromUser]]>\</FromUserName>
+
+\<CreateTime>12345678\</CreateTime>
+
+\<MsgType><![CDATA[text]]>\</MsgType>
+
+\<Content><![CDATA[你好]]>\</Content>
+
+\</xml>
 
 回复图片消息
 
