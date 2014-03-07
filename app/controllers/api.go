@@ -2,7 +2,7 @@ package controllers
 
 import (
 	// "encoding/json"
-	// "fantastic/app/models"
+	"goweixin/app/models"
 	// "bytes"
 	"fmt"
 	// . "github.com/jbrukh/bayesian"
@@ -74,7 +74,6 @@ func (c *Api) Index(signature, timestamp, nonce, echostr string) revel.Result {
 	if signatureSha1(timestamp, nonce) == signature {
 		return c.RenderText(echostr)
 	} else {
-		fmt.Println("-------------")
 		return c.RenderText("false")
 	}
 }
@@ -88,12 +87,12 @@ func DecodeRequest(data []byte) (req *Request, err error) {
 
 func (c *Api) Post() revel.Result {
 	defer c.Request.Body.Close()
-	body, _:= ioutil.ReadAll(c.Request.Body)
+	body, _ := ioutil.ReadAll(c.Request.Body)
 	var wreq *Request
 	wreq, _ = DecodeRequest(body)
-	
-	wresp, _ := dealwith(wreq)
-	
+
+	wresp, _ := dealwith(wreq, c)
+
 	data, _ := wresp.Encode()
 
 	fmt.Println(string(data))
@@ -101,12 +100,13 @@ func (c *Api) Post() revel.Result {
 	return c.RenderText(string(data))
 }
 
-func dealwithText(keyword string, resp *Response) {
-
-	if keyword == "help" {
-		resp.Content = "welcome!"
+func dealwithText(c *Api, keyword string, resp *Response) {
+	autoReply, err := models.GetTextAutoReply(c.MongoSession, keyword)
+	if err != nil {
+		resp.Content = " please input help to get more info"
 	} else {
-		resp.Content = "亲，已经收到您的消息, 将尽快回复您."
+		resp.Content = autoReply.Content
+
 	}
 }
 
@@ -129,7 +129,7 @@ func dealwithImage(req *Request, resp *Response) {
 	resp.FuncFlag = 1
 }
 
-func dealwith(req *Request) (resp *Response, err error) {
+func dealwith(req *Request, c *Api) (resp *Response, err error) {
 	resp = NewResponse()
 	resp.ToUserName = req.FromUserName
 	resp.FromUserName = req.ToUserName
@@ -139,7 +139,7 @@ func dealwith(req *Request) (resp *Response, err error) {
 		dealwithEvent(req, resp)
 	} else if req.MsgType == Text {
 		keyword := strings.Trim(strings.ToLower(req.Content), " ")
-		dealwithText(keyword, resp)
+		dealwithText(c, keyword, resp)
 	} else if req.MsgType == Image {
 		dealwithImage(req, resp)
 	} else {
