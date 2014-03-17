@@ -1,25 +1,33 @@
 package models
 
+import "container/list"
+
 type Rule struct {
   pattern string
   handler func() string
 }
 
-var rules []*Rule
 
-func AppendRule(r *Rule) {
-  rules = append(rules, r)
+type RuleManager struct {
+  rules *list.List
 }
 
-func Check(key string) string {
-  for _, r := range rules {
-    if key == r.pattern {
-      return r.handler()
+func New() (*RuleManager){
+  return &RuleManager {
+    list.New(),
+  }
+}
+
+func (rm *RuleManager) PushBack(rule *Rule) (*RuleManager) {
+  rm.rules.PushBack(rule)
+  return rm
+}
+
+func (rm *RuleManager) Check(key string) string {
+  for e := rm.rules.Front(); e != nil; e = e.Next() {
+    if key == e.Value.(*Rule).pattern {
+      return e.Value.(*Rule).handler()
     }
   }
   return ""
-}
-
-func length() int {
-  return len(rules)
 }
