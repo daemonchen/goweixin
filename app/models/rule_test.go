@@ -2,11 +2,12 @@ package models
 
 import (
 	"testing"
+  "regexp"
 )
 
 func TestCheck(t *testing.T) {
   r := &Rule {
-    "world",
+    regexp.MustCompile("world"),
     func() (resp *Response){
       resp = NewResponse()
       resp.ToUserName = "FromUserName"
@@ -38,7 +39,7 @@ func TestPushBack(t *testing.T) {
   rm := New()
 
   rm.PushBack(&Rule {
-    "hello",
+    regexp.MustCompile("world"),
     func() (resp *Response) {
         resp = NewResponse()
         resp.ToUserName = "FromUserName"

@@ -2,10 +2,11 @@ package models
 
 import(
   "container/list"
+  "regexp"
 )
 
 type Rule struct {
-  pattern string
+  pattern *regexp.Regexp
   handler func() *Response
 }
 
@@ -26,7 +27,7 @@ func (rm *RuleManager) PushBack(rule *Rule) (*RuleManager) {
 
 func (rm *RuleManager) Check(key string) (res *Response){
   for e := rm.rules.Front(); e != nil; e = e.Next() {
-    if key == e.Value.(*Rule).pattern {
+    if e.Value.(*Rule).pattern.Match([]byte(key)) {
       return e.Value.(*Rule).handler()
     }
   }
