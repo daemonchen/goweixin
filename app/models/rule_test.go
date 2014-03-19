@@ -5,6 +5,21 @@ import (
   "regexp"
 )
 
+func TestStringHandler(t *testing.T) {
+  r := &Rule {
+    regexp.MustCompile("hello"),
+    "hello",
+  }
+
+  rm := New()
+  rm.PushBack(r)
+
+  if rm.Check("hello").Content != "hello" {
+    t.Log("given key should return matched string configed in rule")
+    t.Fail()
+  }
+}
+
 func TestCheck(t *testing.T) {
   r := &Rule {
     regexp.MustCompile("world"),
