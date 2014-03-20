@@ -53,3 +53,9 @@ func NewResponse() (resp *Response) {
   resp.CreateTime = time.Duration(time.Now().Unix())
   return
 }
+
+func (resp *Response) Encode() (data []byte, err error) {
+  resp.CreateTime = time.Duration(time.Now().Unix())
+  data, err = xml.Marshal(resp)
+  return
+}

@@ -8,8 +8,8 @@ import(
 )
 
 type Rule struct {
-  pattern *regexp.Regexp
-  handler interface{}
+  Pattern *regexp.Regexp
+  Handler interface{}
 }
 
 type RuleManager struct {
@@ -17,35 +17,44 @@ type RuleManager struct {
   injector inject.Injector
 }
 
-func New() (*RuleManager){
+func NewRuleManager() (*RuleManager){
   return &RuleManager {
     list.New(),
     inject.New(),
   }
 }
 
-func (rm *RuleManager) PushBack(rule *Rule) (*RuleManager) {
+func (rm *RuleManager) Push(rule *Rule) (*RuleManager) {
   rm.rules.PushBack(rule)
   return rm
 }
 
-func (rm *RuleManager) Check(key string) (*Response){
+func (rm *RuleManager) Check(req *Request) (*Response){
   for e := rm.rules.Front(); e != nil; e = e.Next() {
     rule := e.Value.(*Rule)
-    if rule.pattern.Match([]byte(key)) {
-      switch reflect.TypeOf(rule.handler).Kind() {
-      case reflect.Func:
-        ret, _ := rm.injector.Invoke(rule.handler)
-        return ret[0].Interface().(*Response)
-      case reflect.String:
+    if rule.Pattern.Match([]byte(req.Content)) {
+      if res, ok := rule.Handler.(*Response); ok {
+        return res
+      }
+
+      if content, ok := rule.Handler.(string); ok {
         resp := NewResponse()
-        resp.ToUserName = "FromUserName"
-        resp.FromUserName = "ToUserName"
         resp.MsgType = Text
-        resp.Content = rule.handler.(string)
+        resp.FromUserName = req.ToUserName
+        resp.ToUserName = req.FromUserName
+        resp.Content = content
         return resp
+      }
+
+      if reflect.TypeOf(rule.Handler).Kind() == reflect.Func {
+        ret, _ := rm.injector.Invoke(rule.Handler)
+        return ret[0].Interface().(*Response)
       }
     }
   }
-  return nil
+  //default
+  resp := NewResponse()
+  resp.MsgType = Text
+  resp.Content = ""
+  return resp
 }
